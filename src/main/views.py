@@ -5,5 +5,13 @@ from product.models import Product, ProductImage
 
 
 def main(request):
-    return render(request, 'index.html')
+    products = Product.objects.prefetch_related(Prefetch('images', queryset=ProductImage.objects.filter(is_main=True), to_attr='main_images'))[:3]
+    categories = Category.objects.filter(is_main=True)
+    regions = Region.objects.all()
+    ctx = {
+        "products": products,
+        "categories": categories,
+        "regions": regions
+    }
+    return render(request, 'index.html', ctx)
 
