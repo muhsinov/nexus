@@ -5,7 +5,7 @@ from product.models import Product, ProductImage
 
 
 def main(request):
-    products = Product.objects.prefetch_related(Prefetch('images', queryset=ProductImage.objects.filter(is_main=True), to_attr='main_images'))[:3]
+    products = Product.objects.prefetch_related(Prefetch('images', queryset=ProductImage.objects.filter(is_main=True), to_attr='main_images')).order_by('-created_at')[:6]
     categories = Category.objects.filter(is_main=True)
     regions = Region.objects.all()
     ctx = {
@@ -14,4 +14,7 @@ def main(request):
         "regions": regions
     }
     return render(request, 'index.html', ctx)
+
+def contact(request):
+    return render(request, 'contact.html')
 
